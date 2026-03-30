@@ -4,11 +4,12 @@ import string
 from nltk.corpus import stopwords
 import nltk
 from nltk.stem.porter import PorterStemmer
-# Ensure NLTK punkt data is available
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
+# Ensure NLTK punkt and punkt_tab data are available
+for resource in ['punkt', 'punkt_tab']:
+    try:
+        nltk.data.find(f'tokenizers/{resource}')
+    except LookupError:
+        nltk.download(resource)
 
 
 ps = PorterStemmer()
