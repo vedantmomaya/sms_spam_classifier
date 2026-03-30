@@ -20,12 +20,15 @@ st.markdown(
     """
     <style>
     .main {
-        background-color: #f7f7fa;
+        background-color: #181924;
     }
     .stTextArea textarea {
         background-color: #fffbe7;
+        color: #22223b;
         font-size: 1.1em;
         border-radius: 8px;
+        border: 2px solid #b5b5d2;
+        box-shadow: 0 2px 8px rgba(78,84,200,0.08);
     }
     .stButton>button {
         background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
@@ -42,12 +45,13 @@ st.markdown(
         background: #e0e7ff;
         border-radius: 10px;
         padding: 1.5em;
-        margin-top: 1.5em;
+        margin: 2em auto 0 auto;
         text-align: center;
         font-size: 1.3em;
         font-weight: bold;
         color: #22223b;
         box-shadow: 0 2px 8px rgba(78,84,200,0.08);
+        max-width: 600px;
     }
     </style>
     """,
@@ -114,20 +118,18 @@ Paste your message below and click <b>Predict</b> to check if it's spam or not.
 </p>
 """, unsafe_allow_html=True)
 
-input_sms = st.text_area("Enter your message here:", height=150)
 
-col1, col2, col3 = st.columns([1,2,1])
-with col2:
-    predict_btn = st.button('Predict')
+container = st.container()
+with container:
+    st.write("")
+    input_sms = st.text_area("Enter your message here:", height=150)
+    st.write("")
+    predict_btn = st.button('Predict', key='predict_btn', use_container_width=True)
 
 if predict_btn and input_sms.strip():
-    # 1. preprocess
     transformed_sms = transform_text(input_sms)
-    # 2. vectorize
     vector_input = tfidf.transform([transformed_sms])
-    # 3. predict
     result = model.predict(vector_input)[0]
-    # 4. Display
     if result == 1:
         st.markdown('<div class="result-box">🚫 <span style="color:#c1121f">Spam</span></div>', unsafe_allow_html=True)
     else:
